@@ -6,6 +6,7 @@
 namespace x595g {
 enum class opcodes : uint8_t
 {
+    // type1 instructions
     add,
     sub,
     mul,
@@ -19,6 +20,7 @@ enum class opcodes : uint8_t
     stb,
     lod,
 
+    // type2 instructions
     jmp,
     jlt,
     jeq,
@@ -33,6 +35,7 @@ enum class opcodes : uint8_t
     aeq,
     aal,
 
+    // type3 instructions
     ret,
     nop,
 
