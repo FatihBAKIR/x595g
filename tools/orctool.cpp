@@ -27,39 +27,37 @@ void run(const std::vector<std::string_view>& args) {
         file = orc::parse_orc(f);
     }
 
-    if (false) {
-        std::cout << int(file.type) << '\n';
-        std::cout << file.symbols.syms.size() << '\n';
+    std::cout << int(file.type) << '\n';
+    std::cout << file.symbols.syms.size() << '\n';
 
-        std::cout << file.contents.size() << '\n';
+    std::cout << file.contents.size() << '\n';
 
-        fmt::print("Relocations {}\n", file.relocations.relocs.size());
-        for (auto& reloc : file.relocations.relocs) {
-            fmt::print("{}\t{}\t{}\t{}\n", reloc.symbol, reloc.section, reloc.offset, reloc.plus);
-        }
-
-        fmt::print("Sections {}\n", file.sections.sections.size());
+    fmt::print("Relocations {}\n", file.relocations.relocs.size());
+    for (auto& reloc : file.relocations.relocs) {
+        fmt::print(
+            "{}\t{}\t{}\t{}\n", reloc.symbol, reloc.section, reloc.offset, reloc.plus);
     }
 
+    fmt::print("Sections {}\n", file.sections.sections.size());
+
     for (auto& section : file.sections.sections) {
-        fmt::print("{}\t{}\t{}\t{}\n", section.name, section.perm, section.offset, section.size);
+        fmt::print(
+            "{}\t{}\t{}\t{}\n", section.name, section.perm, section.offset, section.size);
         if ((section.perm & orc::permissions::execute) != orc::permissions::none) {
             auto body = file.section_body(section);
             std::stringstream sstr(std::string(body.begin(), body.end()));
 
-            if (false)
             try {
                 for (disassembler d(sstr); !d.done(); d.advance()) {
                     fmt::print("{}\n", *d.get());
                 }
-            }
-            catch (std::exception& err) {
+            } catch (std::exception& err) {
                 std::cout << fmt::format("Dissassembly failed: {}\n", err.what());
             }
         }
     }
 
-    if (false) {   fmt::print("Segments {}\n", file.segments.segs.size());
+    fmt::print("Segments {}\n", file.segments.segs.size());
     for (auto& segment : file.segments.segs) {
         fmt::print("{}\t{}\n", segment.name, segment.perm);
     }
@@ -80,7 +78,7 @@ void run(const std::vector<std::string_view>& args) {
             }
         }
         fmt::print("\n");
-    }}
+    }
 }
 } // namespace x595g
 int main(int argc, char** argv) {
