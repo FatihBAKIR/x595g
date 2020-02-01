@@ -2,7 +2,6 @@
 #include <array>
 #include <fstream>
 #include <iostream>
-#include <dynamic_bitset.hpp>
 
 constexpr uint8_t flip7(uint8_t x) {
     uint8_t res = 0;
