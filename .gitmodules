@@ -1,0 +1,15 @@
+[submodule "fmt"]
+	path = 3rd_party/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "3rd_party/GSL"]
+	path = 3rd_party/GSL
+	url = https://github.com/Microsoft/GSL
+[submodule "3rd_party/yaml-cpp"]
+	path = 3rd_party/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp
+[submodule "3rd_party/fmt"]
+	path = 3rd_party/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "3rd_party/dynamic_bitset"]
+	path = 3rd_party/dynamic_bitset
+	url = git@github.com:pinam45/dynamic_bitset.git
