@@ -73,4 +73,23 @@ bool disassembler::done() {
 }
 
 disassembler::~disassembler() = default;
+
+disassembler_iterator& disassembler_iterator::operator++() {
+    m_disas->advance();
+    return *this;
+}
+
+const instr& disassembler_iterator::operator*() const {
+    return *m_disas->get();
+}
+
+bool operator==(const disassembler_iterator& iter,
+                const disassembler_iterator_sentinel&) {
+    return iter.m_disas->done();
+}
+
+bool operator==(const disassembler_iterator_sentinel&,
+                       const disassembler_iterator& iter) {
+    return iter.m_disas->done();
+}
 } // namespace x595g
