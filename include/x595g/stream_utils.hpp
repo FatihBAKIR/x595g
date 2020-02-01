@@ -60,6 +60,30 @@ public:
         return word14_be_t{buf};
     }
 
+    word21_be_t read_word21_be() {
+        using namespace tos;
+
+        std::array<uint8_t, 3> buf;
+        read(buf);
+        return word21_be_t{buf};
+    }
+
+    word35_be_t read_word35_be() {
+        using namespace tos;
+
+        std::array<uint8_t, 5> buf;
+        read(buf);
+        return word35_be_t{buf};
+    }
+
+    word42_be_t read_word42_be() {
+        using namespace tos;
+
+        std::array<uint8_t, 6> buf;
+        read(buf);
+        return word42_be_t{buf};
+    }
+
     word14_le_t read_short() {
         using namespace tos;
 

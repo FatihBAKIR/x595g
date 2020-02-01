@@ -91,6 +91,53 @@ inline std::ostream& operator<<(std::ostream& os, word14_le_t word) {
     return os << "word14_t{" << word.m_internal << "}";
 }
 
+struct word21_be_t {
+    word21_be_t()
+        : m_internal{0} {
+    }
+
+    explicit word21_be_t(tos::span<const uint8_t> bytes) {
+        m_internal = bytes[2];
+        m_internal |= static_cast<uint32_t>(bytes[1]) << 7;
+        m_internal |= static_cast<uint32_t>(bytes[0]) << 14;
+    }
+
+    uint32_t m_internal;
+};
+
+struct word35_be_t {
+    word35_be_t()
+        : m_internal{0} {
+    }
+
+    explicit word35_be_t(tos::span<const uint8_t> bytes) {
+        m_internal = bytes[4];
+        m_internal |= static_cast<uint64_t>(bytes[3]) << 7;
+        m_internal |= static_cast<uint64_t>(bytes[2]) << 14;
+        m_internal |= static_cast<uint64_t>(bytes[1]) << 21;
+        m_internal |= static_cast<uint64_t>(bytes[0]) << 28;
+    }
+
+    uint64_t m_internal;
+};
+
+struct word42_be_t {
+    word42_be_t()
+        : m_internal{0} {
+    }
+
+    explicit word42_be_t(tos::span<const uint8_t> bytes) {
+        m_internal = bytes[5];
+        m_internal |= static_cast<uint64_t>(bytes[4]) << 7;
+        m_internal |= static_cast<uint64_t>(bytes[3]) << 14;
+        m_internal |= static_cast<uint64_t>(bytes[2]) << 21;
+        m_internal |= static_cast<uint64_t>(bytes[1]) << 28;
+        m_internal |= static_cast<uint64_t>(bytes[0]) << 35;
+    }
+
+    uint64_t m_internal;
+};
+
 struct word14_be_t {
     word14_be_t()
         : m_internal{0} {
