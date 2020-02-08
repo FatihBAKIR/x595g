@@ -4,8 +4,13 @@
 #include <memory>
 #include <x595g/common.hpp>
 #include <iterator>
+#include <variant>
+#include <x595g/stream_utils.hpp>
 
 namespace x595g {
+using instruction =
+std::variant<type1a_instr, type1b_instr, type2a_instr, type2b_instr, type3_instr>;
+instruction parse_one(stream_helper& str);
 
 instr_type classify_instruction(uint8_t first_word);
 
