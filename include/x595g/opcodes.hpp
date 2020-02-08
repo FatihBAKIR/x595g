@@ -46,5 +46,9 @@ enum class opcodes : uint8_t
     type3_begin = ret,
 };
 
+inline bool operator<(opcodes l, opcodes r) {
+    return (int)l < (int)r;
+}
+
 std::ostream& operator<<(std::ostream& os, opcodes opcode);
 } // namespace x595g

@@ -6,6 +6,8 @@
 #include <string_view>
 #include <vector>
 #include <x595g/disassembler.hpp>
+#include <x595g/exec.hpp>
+#include <x595g/memory.hpp>
 #include <x595g/orc.hpp>
 
 std::string hex_string(tos::span<const uint8_t> buf) {
@@ -17,7 +19,25 @@ std::string hex_string(tos::span<const uint8_t> buf) {
     return s;
 }
 
+
 namespace x595g {
+memory apply(const orc::orc_file& file) {
+    memory m;
+
+    for (auto& segment : file.segments.segs) {
+        fmt::print("{}\t{}\t{}\t{}\t{}\n",
+                   segment.name,
+                   segment.perm,
+                   segment.offset,
+                   segment.size,
+                   segment.base);
+
+        m.copy_bulk(segment.base.m_internal, file.segment_body(segment));
+    }
+
+    return m;
+}
+
 void run(const std::vector<std::string_view>& args) {
     orc::orc_file file;
     if (args[1] == "-i") {
@@ -25,6 +45,14 @@ void run(const std::vector<std::string_view>& args) {
     } else if (args[1] == "-f") {
         std::ifstream f{std::string(args[2])};
         file = orc::parse_orc(f);
+    }
+
+    if (file.entry_point) {
+        std::cout << "Entry point: " << *file.entry_point << '\n';
+        interpreter i(apply(file));
+        i.run(*file.entry_point);
+    } else {
+        std::cout << "No entry point\n";
     }
 
     std::cout << int(file.type) << '\n';
@@ -59,7 +87,12 @@ void run(const std::vector<std::string_view>& args) {
 
     fmt::print("Segments {}\n", file.segments.segs.size());
     for (auto& segment : file.segments.segs) {
-        fmt::print("{}\t{}\n", segment.name, segment.perm);
+        fmt::print("{}\t{}\t{}\t{}\t{}\n",
+            segment.name,
+            segment.perm,
+            segment.offset,
+            segment.size,
+            segment.base);
     }
 
     for (auto& sym : file.symbols.syms) {

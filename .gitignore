@@ -2,3 +2,9 @@ build
 challenges
 .clangd
 compile_commands.json
+**/build/
+**/compile_commands.json
+**/cmake-build-*
+**/.clangd
+**/.idea
+*.bin

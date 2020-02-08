@@ -112,6 +112,10 @@ public:
         return m_str->tellg();
     }
 
+    void seek(int pos) {
+        m_str->seekg(pos, std::ios::beg);
+    }
+
 private:
     void read(tos::span<uint8_t> buf) {
         m_str->read(reinterpret_cast<char*>(buf.data()), buf.size());

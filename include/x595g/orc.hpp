@@ -47,9 +47,9 @@ struct relocation_table {
 enum class permissions : uint8_t
 {
     none        = 0,
-    read        = 0b0000'0001,
-    write       = 0b0000'0010,
-    execute     = 0b0000'0100
+    read        = 0b0100'0000,
+    write       = 0b0010'0000,
+    execute     = 0b0001'0000
 };
 
 inline permissions operator&(permissions p, permissions bit) {
@@ -112,9 +112,14 @@ struct orc_file {
     segment_table segments;
     std::vector<uint8_t> contents;
 
-    tos::span<const uint8_t> section_body(const section& sect) {
-        tos::span all(contents);
+    tos::span<const uint8_t> section_body(const section& sect) const {
+        tos::span<const uint8_t> all(contents);
         return all.slice(sect.offset.m_internal, sect.size.m_internal);
+    }
+
+    tos::span<const uint8_t> segment_body(const segment& seg) const {
+        tos::span<const uint8_t> all(contents);
+        return all.slice(seg.offset.m_internal, seg.size.m_internal);
     }
 };
 

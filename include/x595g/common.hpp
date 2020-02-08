@@ -6,6 +6,7 @@
 #include <ostream>
 #include <stdexcept>
 #include <x595g/opcodes.hpp>
+#include <x595g/by7e.hpp>
 
 namespace x595g {
 enum class instr_type
@@ -88,11 +89,11 @@ private:
 };
 
 struct type1b_instr : type1_instr {
-    uint32_t literal;
+    word28_le_t literal;
 
 private:
     std::string dump() const override {
-        return fmt::format("{} %{} ${:#X}", opcode, dst, literal);
+        return fmt::format("{} %{} ${:#X}", opcode, dst, literal.m_internal);
     }
 };
 
@@ -112,11 +113,11 @@ private:
 };
 
 struct type2b_instr : type2_instr {
-    uint32_t literal;
+    word28_le_t literal;
 
 private:
     std::string dump() const override {
-        return fmt::format("{} ${:#X}", opcode, literal);
+        return fmt::format("{} ${:#X}", opcode, literal.m_internal);
     }
 };
 
