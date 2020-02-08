@@ -133,6 +133,7 @@ public:
         seg.name = m_str.read_text();
         seg.offset = m_str.read_word();
         seg.base = m_str.read_word();
+        seg.size = m_str.read_word();
         seg.perm = read_permission();
         seg.type = read_segment_type();
         return seg;

@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
             r >>= 1;
             r &= 0x7F;
             large <<= 7;
-            r = flip7(r);
+            //r = flip7(r);
         }
         return res;
     };

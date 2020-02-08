@@ -94,6 +94,7 @@ struct segment {
     std::string name;
     word28_le_t offset;
     word28_le_t base;
+    word28_le_t size;
     permissions perm;
     segment_type type;
 };
