@@ -48,16 +48,34 @@ private:
         orr_b(dest, read(src));
     }
 
-    void orr_b(registers dest, word28_le_t src) {
-        write(dest, read(dest) | src);
+    void orr_b(registers dest, word28_le_t src)
+    {
+        auto res = read(dest) | src;
+
+        // setting the flags:
+        flags.ZF = !res.m_internal;
+        flags.OF = false;
+        flags.CF = false;
+        flags.SF = !res.is_positive();
+
+        write(dest, res);
     }
 
     void xor_a(registers dest, registers src) {
         xor_b(dest, read(src));
     }
 
-    void xor_b(registers dest, word28_le_t src) {
-        write(dest, read(dest) ^ src);
+    void xor_b(registers dest, word28_le_t src)
+    {
+        auto res = read(dest) ^ src;
+
+        // setting the flags:
+        flags.ZF = !res.m_internal;
+        flags.OF = false;
+        flags.CF = false;
+        flags.SF = !res.is_positive();
+
+        write(dest, res);
     }
 
     void out_a(registers r) {
@@ -80,7 +98,52 @@ private:
     }
 
     void lod_b(registers dest, word28_le_t from) {
-        write(dest, mem.read(from.m_internal));
+        auto res = mem.read(from.m_internal);
+
+        // setting the flags:
+        flags.ZF = !res.m_internal;
+        flags.OF = false;
+        flags.CF = false;
+        flags.SF = !res.is_positive();
+
+        write(dest, res);
+    }
+
+    void add_a(registers dest, registers src)
+    {
+        add_b(dest, read(src));
+    }
+
+    void add_b(registers dest, word28_le_t src)
+    {
+        auto res = read(dest) + src;
+
+        // set the flags:
+        flags.ZF = !res.m_internal;
+        flags.OF = res.overflown;
+        flags.CF = res.signed_overflown;
+        flags.SF = !res.is_positive();
+
+        write(dest, res);
+    }
+
+    void sub_a(registers dest, registers src)
+    {
+        sub_b(dest, read(src));
+    }
+
+    void sub_b(registers dest, word28_le_t src)
+    {
+//        auto neg_src = src * -1;
+        auto res = read(dest) - src;
+
+        // set the flags:
+        flags.ZF = !res.m_internal;
+        flags.OF = res.overflown;
+        flags.CF = res.signed_overflown;
+        flags.SF = !res.is_positive();
+
+        write(dest, res);
     }
 
     void stb_a(registers dest, registers src) {
