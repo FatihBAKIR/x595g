@@ -41,7 +41,7 @@ private:
     void aal_b(word28_le_t to) {
         // 5 byte
         psh_b(read(registers::pc));
-        write(registers::pc, to + 13);
+        write(registers::pc, to);
     }
 
     void orr_a(registers dest, registers src) {
