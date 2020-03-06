@@ -8,20 +8,35 @@
 namespace mp = boost::multiprecision;
 template<size_t Bits>
 using num =
-    mp::number<mp::cpp_int_backend<Bits, Bits, mp::signed_magnitude, mp::checked, void>>;
+    mp::number<mp::cpp_int_backend<Bits, Bits, mp::signed_magnitude, mp::unchecked, void>>;
 
 using int28_t = num<28>;
 using int7_t = num<7>;
 using int14_t = num<14>;
 
+int7_t compute_cur(int7_t val) {
+    int14_t multiplied = int14_t(val) * 7;
+    int7_t cur(multiplied & 127);
+    cur |= 0b1001001;
+    cur /= 3;
+    return cur;
+}
+
+std::vector<int7_t> generate_lookup() {
+    std::vector<int7_t> table;
+    for (int i = 0; i < 128; ++i) {
+        table.emplace_back(compute_cur(int7_t(i)));
+    }
+    return table;
+}
+
+const auto lookup = generate_lookup();
+
 int28_t A(const int7_t* idx, int28_t iter) noexcept {
     int28_t accum = 0;
 
     while (iter != 0) {
-        int14_t multiplied = int14_t(*idx) * 7;
-        int7_t cur(multiplied & 127);
-        cur |= 0b1001001;
-        cur /= 3;
+        auto cur = lookup[int(*idx)];
         accum ^= cur;
         ++idx;
         --iter;
