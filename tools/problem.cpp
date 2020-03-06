@@ -15,40 +15,36 @@ using int7_t = num<7>;
 using int14_t = num<14>;
 
 int7_t compute_cur(int7_t val) {
-    int14_t multiplied = int14_t(val) * 7;
-    int7_t cur(multiplied & 127);
+    int28_t cur = int28_t(val) * 7;
     cur |= 0b1001001;
     cur /= 3;
-    return cur;
+    return int7_t(cur & 127);
 }
 
-std::vector<int7_t> generate_lookup() {
-    std::vector<int7_t> table;
+std::vector<int8_t> generate_lookup() {
+    std::vector<int8_t> table;
     for (int i = 0; i < 128; ++i) {
-        table.emplace_back(compute_cur(int7_t(i)));
+        table.emplace_back(compute_cur(int7_t(i)) & 127);
     }
     return table;
 }
 
 const auto lookup = generate_lookup();
 
-int28_t A(const int7_t* idx, int28_t iter) noexcept {
-    int28_t accum = 0;
+int8_t A(const int8_t* idx, int32_t iter) noexcept {
+    int8_t accum = 0;
 
-    while (iter != 0) {
-        auto cur = lookup[int(*idx)];
-        accum ^= cur;
-        ++idx;
-        --iter;
+    for (; iter != 0; --iter, ++idx) {
+        accum ^= lookup[int(*idx)];
     }
 
     return accum;
 }
 
-std::array<int7_t, 32> key{1, 0, 0, 89, 67, 3, 0,  0,  49, 40, 1,  0, 0, 0, 89, 45,
+std::array<int8_t, 32> key{1, 0, 0, 89, 67, 3, 0,  0,  49, 40, 1,  0, 0, 0, 89, 45,
                            1, 0, 0, 40, 51, 0, 39, 83, 0,  48, 48, 8, 0, 0, 0,  43};
 
-bool tryit(const std::array<int7_t, 32>& input) {
+bool tryit(const std::array<int8_t, 32>& input) {
     for (int i = 7; i <= 7; ++i) {
         if (key[i] != A(input.data(), i)) {
             return false;
@@ -64,7 +60,7 @@ int main() {
     int thread_id = 0;
     for (auto& t : threads) {
         t = std::thread([=]{
-          std::array<int7_t, 32> input{};
+          std::array<int8_t, 32> input{};
           auto end = (thread_id + 1) * top_level_iters_per_thread;
           for (int i0 = thread_id * top_level_iters_per_thread; i0 < end; ++i0) {
               input[0] = i0;
